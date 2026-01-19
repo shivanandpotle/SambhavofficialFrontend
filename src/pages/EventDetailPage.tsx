@@ -8,10 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Calendar,
-  MapPin,
-  Clock,
-  Users,
   ArrowLeft,
   Sparkles,
   ScrollText,
@@ -35,37 +31,24 @@ const EventDetailPage: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [userAcceptedTerms, setUserAcceptedTerms] = useState(false);
 
-  /* ================= LOADING GUARD ================= */
+  /* ================= LOADING ================= */
   if (events.length === 0) {
     return (
-      <div className="pt-24 min-h-screen flex flex-col items-center justify-center bg-[#1a120b] text-[#d4af37]">
-        <Sparkles className="animate-pulse mb-4 h-12 w-12" />
-        <p className="font-serif italic text-xl">
-          Consulting the Marauder's Map...
-        </p>
+      <div className="pt-24 min-h-screen flex items-center justify-center bg-[#1a120b] text-[#d4af37]">
+        <Sparkles className="animate-pulse h-12 w-12 mr-3" />
+        Loading events…
       </div>
     );
   }
 
   const event = events.find((e) => e.id === eventId);
 
-  /* ================= INVALID EVENT ================= */
   if (!event) {
     return (
       <div className="pt-24 min-h-screen flex items-center justify-center bg-[#1a120b]">
-        <div className="text-center p-8 border-2 border-[#d4af37] bg-[#2d1e12] rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-          <h1 className="text-3xl font-serif font-bold mb-4 text-[#d4af37]">
-            Vanished into the Forbidden Forest
-          </h1>
-          <Button
-            onClick={() => navigate("/events")}
-            variant="outline"
-            className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#1a120b]"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Return to the Great Hall
-          </Button>
-        </div>
+        <Button onClick={() => navigate("/events")}>
+          <ArrowLeft className="mr-2" /> Back to Events
+        </Button>
       </div>
     );
   }
@@ -74,21 +57,20 @@ const EventDetailPage: React.FC = () => {
   const handleFormSubmit = async (data: Record<string, unknown>) => {
     if (!userAcceptedTerms) {
       toast({
-        title: "Decree Not Accepted",
-        description:
-          "You must accept the terms and conditions before proceeding.",
+        title: "Accept Terms",
+        description: "Please accept terms to continue.",
         variant: "destructive",
       });
       return;
     }
 
     const userEmail = data.email as string;
-    const userName = (data.name || "Wizard") as string;
+    const userName = (data.name || "Guest") as string;
 
     if (!userEmail) {
       toast({
         title: "Email Required",
-        description: "Email is missing from form data.",
+        description: "Email is required.",
         variant: "destructive",
       });
       return;
@@ -117,16 +99,16 @@ const EventDetailPage: React.FC = () => {
         return;
       }
 
+      // ✅ CORRECT CALL (THIS FIXES EVERYTHING)
       payForEvent(
         event.title,
         finalAmount,
         { name: userName, email: userEmail },
-        (response: any) => {
-          verifyAndSave(response, data, userName, userEmail);
-        },
-        orderJson.order.id
+        orderJson.order.id,
+        data
       );
-    } catch {
+
+    } catch (err) {
       toast({
         title: "Server Error",
         description: "Unable to initiate payment.",
@@ -135,167 +117,94 @@ const EventDetailPage: React.FC = () => {
     }
   };
 
-  /* ================= VERIFY & SAVE ================= */
-  const verifyAndSave = async (
-    response: any,
-    allFormData: any,
-    name: string,
-    email: string
-  ) => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/verify-payment`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_signature: response.razorpay_signature,
-            eventTitle: event.title,
-            name,
-            email,
-            formData: allFormData,
-          }),
-        }
-      );
-
-      const json = await res.json();
-
-      if (json.success) {
-        toast({
-          title: "Mischief Managed! 🎉",
-          description: "Your owl is on its way.",
-        });
-        setIsRegistering(false);
-        setUserAcceptedTerms(false);
-      }
-    } catch {
-      toast({
-        title: "Payment Successful",
-        description:
-          "If ticket email is delayed, please contact support.",
-      });
-      setIsRegistering(false);
-    }
-  };
-
   /* ================= UI ================= */
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-[#1a120b] selection:bg-[#741b1b] selection:text-white">
-      
-      {/* ✅ ONLY FIX: INPUT TEXT VISIBILITY (NO UI CHANGE) */}
-      <style>{`
-        input,
-        textarea,
-        select {
-          color: #111111 !important;
-          background-color: #ffffff !important;
-          caret-color: #111111 !important;
-        }
-
-        input::placeholder,
-        textarea::placeholder {
-          color: #444444 !important;
-          opacity: 1 !important;
-        }
-      `}</style>
-
+    <div className="pt-24 pb-16 min-h-screen bg-[#1a120b]">
       <div className="container mx-auto px-4">
+
         <Button
           onClick={() => navigate("/events")}
           variant="ghost"
-          className="mb-6 text-[#d4af37] hover:bg-[#2d1e12] hover:text-[#f3e5ab] font-serif"
+          className="mb-6 text-[#d4af37]"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to the Common Room
+          <ArrowLeft className="mr-2" /> Back to Events
         </Button>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <div className="aspect-video rounded-2xl overflow-hidden border-4 border-[#3c2a1a] shadow-[0_10px_30px_rgba(0,0,0,0.5)] bg-[#000]">
+          <div className="lg:col-span-2">
+            <div className="aspect-video bg-black rounded-xl overflow-hidden mb-6">
               {event.image ? (
                 <img
                   src={`/assets/events/${event.image}`}
                   alt={event.title}
-                  className="w-full h-full object-cover opacity-90 sepia-[0.2]"
+                  className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="h-full flex items-center justify-center bg-[#2d1e12]">
-                  <ScrollText className="h-24 w-24 text-[#d4af37]/30" />
+                <div className="h-full flex items-center justify-center">
+                  <ScrollText className="h-20 w-20 text-[#d4af37]/30" />
                 </div>
               )}
             </div>
 
-            <div className="p-8 bg-[#fdf5e6] border-l-8 border-[#741b1b] rounded-r-lg shadow-inner relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+            <h1 className="text-4xl font-bold text-[#d4af37] mb-4">
+              {event.title}
+            </h1>
 
-              <h1 className="text-4xl font-serif font-bold mb-4 text-[#2d1e12] flex items-center gap-3">
-                <Sparkles className="text-[#d4af37]" />
-                {event.title}
-              </h1>
+            <p className="text-[#f3e5ab] whitespace-pre-line">
+              {event.description}
+            </p>
 
-<p className="whitespace-pre-line text-[#3c2a1a] leading-relaxed text-lg font-serif mb-6">
-  {event.description}
-</p>
-
-
-              <Button
-                asChild
-                className="bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif rounded-none border-b-2 border-[#3c1010]"
+            <Button
+              asChild
+              className="mt-6 bg-[#741b1b] text-[#f3e5ab]"
+            >
+              <a
+                href="https://drive.google.com/drive/folders/1ouQZ2addLpdqgkKYBDkF7FnqAVt26uy7"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <a
-                  href="https://drive.google.com/drive/folders/1ouQZ2addLpdqgkKYBDkF7FnqAVt26uy7?usp=sharing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Read the Rule Book
-                </a>
-              </Button>
-            </div>
+                <BookOpen className="mr-2" /> Read Rule Book
+              </a>
+            </Button>
           </div>
 
           <div>
-            <Card className="sticky top-28 bg-[#f3e5ab] border-2 border-[#d4af37] shadow-[5px_5px_0px_#741b1b] overflow-hidden">
-              <CardHeader className="bg-[#741b1b] text-[#f3e5ab] border-b-2 border-[#d4af37]">
-                <CardTitle className="font-serif tracking-widest uppercase text-center text-sm">
-                  Official Decree
-                </CardTitle>
+            <Card className="sticky top-28 bg-[#f3e5ab]">
+              <CardHeader>
+                <CardTitle>Register</CardTitle>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent>
                 {!isRegistering ? (
                   <Button
-                    size="lg"
-                    className="w-full bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif text-lg py-6 rounded-none"
+                    className="w-full"
                     onClick={() => setIsRegistering(true)}
                   >
                     Enlist Now
                   </Button>
                 ) : (
-                  <div className="space-y-4">
+                  <>
                     <DynamicFormRenderer
                       fields={event.formFields}
                       onSubmit={handleFormSubmit}
                       submitLabel={
-                        !userAcceptedTerms
-                          ? "Accept Terms to Enlist"
-                          : "Pay Galleons & Enlist"
+                        userAcceptedTerms
+                          ? "Pay & Register"
+                          : "Accept Terms to Continue"
                       }
                     />
 
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-2 mt-4">
                       <Checkbox
                         checked={userAcceptedTerms}
                         onCheckedChange={(v) =>
                           setUserAcceptedTerms(v as boolean)
                         }
                       />
-                      <span className="text-xs">
-                        I accept all terms and conditions
+                      <span className="text-sm">
+                        I accept terms & conditions
                       </span>
                     </div>
-                  </div>
+                  </>
                 )}
               </CardContent>
             </Card>
