@@ -79,14 +79,20 @@ const EventDetailPage: React.FC = () => {
     const finalAmount = Math.ceil(event.ticketPrice / 0.9764);
 
     try {
-      const orderRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/create-order`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: finalAmount }),
-        }
-      );
+  const orderRes = await fetch(
+  `${import.meta.env.VITE_API_URL}/api/create-order`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      amount: finalAmount,
+      name: userName,
+      email: userEmail,
+      eventTitle: event.title,
+    }),
+  }
+);
+
 
       const orderJson = await orderRes.json();
 
