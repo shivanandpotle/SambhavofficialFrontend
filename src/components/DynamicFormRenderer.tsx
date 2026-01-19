@@ -58,11 +58,11 @@ export const DynamicFormRenderer = ({
             {type === "textarea" ? (
               <Textarea
                 {...register(id, { required: field?.required })}
-                className="bg-white/60"
+                className="bg-white/60  text-black placeholder:text-gray-500"
               />
             ) : type === "dropdown" ? (
               <Select onValueChange={(v) => setValue(id, v)}>
-                <SelectTrigger className="bg-white/60">
+                <SelectTrigger className="bg-white/60  text-black placeholder:text-gray-500">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -77,7 +77,7 @@ export const DynamicFormRenderer = ({
               <Input
                 type={type}
                 {...register(id, { required: field?.required })}
-                className="bg-white/60"
+                className="bg-white/60 text-black placeholder:text-gray-500"
               />
             )}
           </div>
@@ -90,3 +90,4 @@ export const DynamicFormRenderer = ({
     </form>
   );
 };
+
