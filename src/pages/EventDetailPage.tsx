@@ -79,20 +79,51 @@ const EventDetailPage: React.FC = () => {
     const finalAmount = Math.ceil(event.ticketPrice / 0.9764);
 
     try {
-  const orderRes = await fetch(
-  `${import.meta.env.VITE_API_URL}/api/create-order`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      amount: finalAmount,
-      name: userName,
-      email: userEmail,
-      eventTitle: event.title,
-    }),
-  }
-);
+      /* ==================================================
+         STEP 1: PRE-REGISTER (SAVE FORM DATA FIRST)
+         ================================================== */
+      const preRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/pre-register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            eventTitle: event.title,
+            name: userName,
+            email: userEmail,
+            formData: data,
+          }),
+        }
+      );
 
+      const preJson = await preRes.json();
+
+      if (!preJson.success) {
+        toast({
+          title: "Registration failed",
+          description: "Could not save form data.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      /* ==================================================
+         STEP 2: CREATE RAZORPAY ORDER
+         ================================================== */
+      const orderRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/create-order`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: finalAmount,
+            name: userName,
+            email: userEmail,
+            eventTitle: event.title,
+            preId: preJson.preId,
+          }),
+        }
+      );
 
       const orderJson = await orderRes.json();
 
@@ -105,7 +136,9 @@ const EventDetailPage: React.FC = () => {
         return;
       }
 
-      // ✅ CORRECT CALL (THIS FIXES EVERYTHING)
+      /* ==================================================
+         STEP 3: OPEN RAZORPAY CHECKOUT
+         ================================================== */
       payForEvent(
         event.title,
         finalAmount,
@@ -160,10 +193,7 @@ const EventDetailPage: React.FC = () => {
               {event.description}
             </p>
 
-            <Button
-              asChild
-              className="mt-6 bg-[#741b1b] text-[#f3e5ab]"
-            >
+            <Button asChild className="mt-6 bg-[#741b1b] text-[#f3e5ab]">
               <a
                 href="https://drive.google.com/drive/folders/1ouQZ2addLpdqgkKYBDkF7FnqAVt26uy7"
                 target="_blank"
