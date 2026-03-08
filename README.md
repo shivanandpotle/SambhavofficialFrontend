@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
+Sambhav Official - Event Registration Frontend
+A modern, responsive web interface built to handle high-volume event registrations and secure payment processing for the Sambhav Club.
 
-## Project info
+🚀 Technical Stack
+Framework: React.js (or Vite/Next.js as applicable)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Styling: Tailwind CSS / Material UI
 
-## How can I edit this code?
+State Management: React Context API / Redux (for handling multi-step form data)
 
-There are several ways of editing your application.
+Payment Gateway: Razorpay Checkout Integration
 
-**Use Lovable**
+API Client: Axios (with withCredentials for session-based admin access)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+🛠️ Key Features
+1. Multi-Step Registration Flow
+The frontend captures attendee information across multiple stages to ensure a clean UX. It utilizes a "Pre-registration" strategy where data is synced to the backend /api/pre-register endpoint before the payment begins. This ensures no user data is lost if a transaction is abandoned.
 
-Changes made via Lovable will be committed automatically to this repo.
+2. Secure Payment Processing
+Integrated with the Razorpay Standard Checkout.
 
-**Use your preferred IDE**
+Signature Verification: Upon successful payment, the frontend sends the razorpay_payment_id, razorpay_order_id, and razorpay_signature to the /api/verify-payment endpoint for backend validation.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Real-time Feedback: Displays instant success/failure states based on the cryptographic verification performed by the server.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. Dynamic Ticket Preview
+A dedicated UI component that reflects the data structure used in the generated PDF tickets, including the attendee's name and unique Ticket ID (e.g., TICKET-17XXXXXXXX).
 
-Follow these steps:
+4. Admin Portal
+A protected dashboard for club organizers to:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Authenticate via secure session-based login.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+View a real-time list of all successful registrations fetched from /api/registrations.
 
-# Step 3: Install the necessary dependencies.
-npm i
+Track payment statuses for Day 1 and Day 2 attendance.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+🏗️ Folder Structure
+Plaintext
+src/
+├── components/     # Reusable UI (Buttons, Inputs, Navbar)
+├── pages/          # Home, Register, Success, AdminDashboard
+├── services/       # API calling logic (Axios instances)
+├── hooks/          # Custom hooks for form validation
+└── utils/          # Formatting for dates and currency
+🔧 Installation
+Clone the repo:
+
+Bash
+git clone <frontend-repo-url>
+Install Dependencies:
+
+Bash
+npm install
+Configure Environment:
+Create a .env file:
+
+Code snippet
+VITE_API_BASE_URL=http://localhost:5000
+VITE_RAZORPAY_KEY_ID=your_razorpay_key
+Run Development Server:
+
+Bash
 npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Developed by Shivanand H. Potle
