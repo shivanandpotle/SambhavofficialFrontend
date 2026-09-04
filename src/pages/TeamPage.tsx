@@ -55,6 +55,13 @@ const realTeamMembers: TeamMember[] = [
     image: getTeamImage("shivanand-potle.jpg"),
     tier: "council",
   },
+     {
+    id: "22",
+    name: "Ranjeet",
+    role: "Joint Secretary",
+    image: getTeamImage("Ranjeet.jpg"),
+    tier: "council",
+  },
   {
     id: "5",
     name: "Shreyash Mangale",
@@ -76,6 +83,13 @@ const realTeamMembers: TeamMember[] = [
     name: "Ishanvi Gawade",
     role: "Polytechnic Head",
     image: getTeamImage("ishanvi.jpeg"),
+    tier: "heads",
+  },
+     {
+    id: "23",
+    name: "Aditya",
+    role: "Event Management Head",
+    image: getTeamImage("Aditya.jpg"),
     tier: "heads",
   },
   {
