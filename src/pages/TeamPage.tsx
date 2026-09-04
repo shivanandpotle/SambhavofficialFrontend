@@ -5,141 +5,193 @@ import { Users } from "lucide-react";
 
 /* =====================
    DYNAMIC ASSET HELPER
+   Photos live in public/assets/team/ and are served from the site root.
+   encodeURI keeps filenames containing spaces valid inside <img src>.
 ===================== */
-const getTeamImage = (name: string) => {
-  return new URL(`../assets/teams/${name}`, import.meta.url).href;
+const getTeamImage = (fileName: string) => encodeURI(`/assets/team/${fileName}`);
+
+type Tier = "founder" | "council" | "heads" | "coheads";
+
+type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  image: string;
+  tier: Tier;
 };
 
 /* =====================
    REAL TEAM DATA
 ===================== */
-const realTeamMembers = [
+const realTeamMembers: TeamMember[] = [
+  /* ---- Tier 1: Founder President ---- */
   {
     id: "1",
     name: "Vikram Khade",
-    role: "Founder & President",
-    bio: "Visionary leader with 10+ years in social entrepreneurship.",
-    image: getTeamImage("vikram-khade.jpg"),
-    category: "leadership",
-  },
-  {
-    id: "2",
-    name: "Pranav More",
-    role: "Current President",
-    image: getTeamImage("pranav-more.jpeg"), 
-    category: "core",
+    role: "Founder President",
+    image: getTeamImage("vikram khade.jpg"),
+    tier: "founder",
   },
 
-     {
-    id: "24",
-    name: "Tejas Ghondage",
-    role: "Vice President ",
-    image: getTeamImage("tejas-g.jpeg"), 
-    category: "core",
+  /* ---- Tier 2: Core Council ---- */
+  {
+    id: "2",
+    name: "Adityaraj Kshetre",
+    role: "President",
+    image: getTeamImage("Adityaraj Kshetre.jpg"),
+    tier: "council",
+  },
+  {
+    id: "3",
+    name: "Sharvan Koul",
+    role: "Vice President",
+    image: getTeamImage("sharvan koul.jpeg"),
+    tier: "council",
   },
   {
     id: "4",
-    name: "Sanika Avhad",
+    name: "Shivanand Potle",
     role: "Secretary",
-    image: getTeamImage("sanika-avhad.jpg"),
-    category: "core",
-  },
-  {
-    id: "5",
-    name: "Siddharth Gawali",
-    role: "Treasurer",
-    image: getTeamImage("siddharth-gawali.jpg"),
-    category: "core",
-  },
-  {
-    id: "6",
-    name: "OM Sonawane",
-    role: "Founding Team Member",
-    image: getTeamImage("om-sonawane.PNG"), 
-    category: "core",
-  },
-     {
-    id: "25",
-    name: "Smita Swami",
-    role: "PR TEAM HEAD",
-    image: getTeamImage("smita-swami.jpg"),
-    category: "bod",
-  },
-
-   
-     {
-    id: "23",
-    name: "Shreyas G",
-    role: "CSD",
-    image: getTeamImage("shreyas-g.jpg"),
-    category: "bod",
-  },
-  {
-    id: "14",
-    name: "shivanand Potle",
-    role: "TECHNICAL HEAD",
     image: getTeamImage("shivanand-potle.jpg"),
-    category: "bod",
-  },
-  {
-    id: "21",
-    name: "Adityaraj K",
-    role: "JR. CSD",
-    image: getTeamImage("adityaraj-k.jpg"),
-    category: "bod",
-  },
-     {
-    id: "20",
-    name: "Sarthak D",
-    role: "EVENT HEAD",
-    image: getTeamImage("sarthak-d.jpg"),
-    category: "bod",
+    tier: "council",
   },
      {
     id: "22",
-    name: "Shreyash M",
-    role: "DOCUMENTATION HEAD",
-    image: getTeamImage("shreyash-m.jpg"),
-    category: "bod",
+    name: "Ranjeet",
+    role: "Joint Secretary",
+    image: getTeamImage("Ranjeet.jpg"),
+    tier: "council",
   },
   {
+    id: "5",
+    name: "Shreyash Mangale",
+    role: "Treasurer",
+    image: getTeamImage("Shreyash Mangale.jpeg"),
+    tier: "council",
+  },
+
+  /* ---- Tier 3: Heads of Department ---- */
+  {
+    id: "6",
+    name: "Tanishka Bellale",
+    role: "Graphics Design Head",
+    image: getTeamImage("tanishka.jpeg"),
+    tier: "heads",
+  },
+  {
+    id: "7",
+    name: "Ishanvi Gawade",
+    role: "Polytechnic Head",
+    image: getTeamImage("ishanvi.jpeg"),
+    tier: "heads",
+  },
+     {
+    id: "23",
+    name: "Aditya",
+    role: "Event Management Head",
+    image: getTeamImage("Aditya.jpg"),
+    tier: "heads",
+  },
+  {
+    id: "8",
+    name: "Purva Kadam",
+    role: "Technical Operations Head",
+    image: getTeamImage("purva.jpeg"),
+    tier: "heads",
+  },
+  {
+    id: "9",
+    name: "Vedika Palve",
+    role: "PR Head",
+    image: getTeamImage("vedika.jpg"),
+    tier: "heads",
+  },
+  {
+    id: "10",
+    name: "Aditya Dolchipure",
+    role: "Media Production Head",
+    image: getTeamImage("Aditya dolchipure.jpg"),
+    tier: "heads",
+  },
+  {
+    id: "11",
+    name: "Prathmesh Shinde",
+    role: "Membership Director",
+    image: getTeamImage("prathmesh.png"),
+    tier: "heads",
+  },
+  {
+    id: "12",
+    name: "Komal Patil",
+    role: "Student Relations Director",
+    image: getTeamImage("komal.jpeg"),
+    tier: "heads",
+  },
+  {
+    id: "13",
+    name: "Janhavi Wankhade",
+    role: "Club Service Director",
+    image: getTeamImage("janhavi.jpg"),
+    tier: "heads",
+  },
+  {
+    id: "14",
+    name: "Aaditi Metkari",
+    role: "Mechanical Department Head",
+    image: getTeamImage("aaditi metkari.jpeg"),
+    tier: "heads",
+  },
+  {
+    id: "15",
+    name: "Diksha Dhembre",
+    role: "CS Department Head",
+    image: getTeamImage("diksha.jpeg"),
+    tier: "heads",
+  },
+  {
+    id: "16",
+    name: "Eshika Swami",
+    role: "IT Department Head & Associate PR Officer",
+    image: getTeamImage("eshika.jpeg"),
+    tier: "heads",
+  },
+
+  /* ---- Tier 4: Co-Heads & Associates ---- */
+  {
     id: "17",
-    name: "Ruchita P",
-    role: "GRAPHICS HEAD",
-    image: getTeamImage("ruchita-p.jpg"),
-    category: "bod",
+    name: "Tanishka Gawale",
+    role: "Graphics Co-Head",
+    image: getTeamImage("Tanishka Gawale.jpg"),
+    tier: "coheads",
   },
   {
     id: "18",
-    name: "Rushikesh.Z",
-    role: "VIDEO HEAD",
-    image: getTeamImage("rushikesh-z.jpg"),
-    category: "bod",
+    name: "Aditi Bhupatwar",
+    role: "Technical Co-Head",
+    image: getTeamImage("aditi.jpeg"),
+    tier: "coheads",
   },
   {
     id: "19",
-    name: "Tejaswini E",
-    role: "PR CO-HEAD",
-    image: getTeamImage("tejaswini-e.jpg"),
-    category: "bod",
+    name: "Virendra Khade",
+    role: "Event Co-Head",
+    image: getTeamImage("Virendra Khade.jpg"),
+    tier: "coheads",
   },
-
   {
     id: "20",
-    name: "Ranjeet K",
-    role: "EVENT CO-HEAD",
-    image: getTeamImage("ranjeet-k.jpg"),
-    category: "bod",
+    name: "Viraj Chandekar",
+    role: "Media Production Manager",
+    image: getTeamImage("Viraj.jpg"),
+    tier: "coheads",
   },
-     {
-    id: "16",
-    name: "Nitin B",
-    role: "Documentation Co-Head ",
-    image: getTeamImage("nitin-b.png"),
-    category: "bod",
+  {
+    id: "21",
+    name: "Hardik Jain",
+    role: "Associate Club Service Director",
+    image: getTeamImage("hardik.jpeg"),
+    tier: "coheads",
   },
-
-
 ];
 
 const fadeUp: Variants = {
@@ -152,11 +204,12 @@ const fadeUp: Variants = {
 };
 
 export const TeamPage: React.FC = () => {
-  const leadership = realTeamMembers.filter((m) => m.category === "leadership");
-  const coreTeam = realTeamMembers.filter((m) => m.category === "core");
-  const bod = realTeamMembers.filter((m) => m.category === "bod");
+  const founder = realTeamMembers.filter((m) => m.tier === "founder");
+  const council = realTeamMembers.filter((m) => m.tier === "council");
+  const heads = realTeamMembers.filter((m) => m.tier === "heads");
+  const coheads = realTeamMembers.filter((m) => m.tier === "coheads");
 
-  const TeamMemberCard = ({ member }: { member: typeof realTeamMembers[number] }) => (
+  const TeamMemberCard = ({ member }: { member: TeamMember }) => (
     <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
       <Card className="group overflow-hidden border border-[#d4af37] shadow-[3px_3px_0px_#3c2a1a] bg-[#fdf5e6] rounded-none relative h-full">
         <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
@@ -187,42 +240,53 @@ export const TeamPage: React.FC = () => {
     </motion.div>
   );
 
+  const TeamSection = ({ title, members }: { title: string; members: TeamMember[] }) => (
+    <section className="mb-16">
+      <h2 className="text-2xl sm:text-3xl mb-6 text-[#d4af37] font-bold border-b border-[#d4af37]/30 pb-2 inline-block">
+        {title}
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
+        {members.map((m) => (
+          <TeamMemberCard key={m.id} member={m} />
+        ))}
+      </div>
+    </section>
+  );
+
   return (
     <div className="pt-20 min-h-screen bg-[#1a120b] text-[#f3e5ab] font-serif relative overflow-hidden px-2 sm:px-4">
       <div className="container mx-auto py-10 text-center relative z-10">
         <h1 className="text-3xl sm:text-5xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "serif" }}>
           The Order of Sambhav
         </h1>
-        
-        {/* Leadership */}
+
+        {/* Tier 1 - Founder President */}
         <div className="flex justify-center mb-16 px-4">
-          {leadership.map(m => (
+          {founder.map((m) => (
             <div key={m.id} className="w-full max-w-[280px] sm:max-w-sm">
-               <TeamMemberCard member={m} />
+              <TeamMemberCard member={m} />
             </div>
           ))}
         </div>
 
-        {/* Core Team - 2 Columns Mobile, 3-4 Columns Desktop */}
-        <section className="mb-16">
-            <h2 className="text-2xl sm:text-3xl mb-6 text-[#d4af37] font-bold border-b border-[#d4af37]/30 pb-2 inline-block">Core Team</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
-                {coreTeam.map(m => <TeamMemberCard key={m.id} member={m} />)}
-            </div>
-        </section>
+        {/* Tier 2 - Core Council */}
+        <TeamSection title="Core Council" members={council} />
 
-        {/* BOD - 2 Columns Mobile, 3-4 Columns Desktop */}
+        {/* Tier 3 - Heads of Department */}
+        <TeamSection title="Heads of Department" members={heads} />
+
+        {/* Tier 4 - Co-Heads & Associates */}
         <section className="pb-10">
-            <h2 className="text-2xl sm:text-3xl mb-6 text-[#d4af37] font-bold border-b border-[#d4af37]/30 pb-2 inline-block">Board of Directors</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
-                {bod.map(m => <TeamMemberCard key={m.id} member={m} />)}
-            </div>
+          <h2 className="text-2xl sm:text-3xl mb-6 text-[#d4af37] font-bold border-b border-[#d4af37]/30 pb-2 inline-block">
+            Co-Heads &amp; Associates
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
+            {coheads.map((m) => (
+              <TeamMemberCard key={m.id} member={m} />
+            ))}
+          </div>
         </section>
       </div>
     </div>
   );
 };
-
-
-
-
